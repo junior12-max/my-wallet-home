@@ -9,13 +9,13 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Sign in to Meridian — Private USD Banking" },
+      { title: "Sign in to Vaulta — Private USD Banking" },
       {
         name: "description",
         content:
-          "Sign in or create your Meridian account to manage your USD balance, virtual debit cards, and ACH transfers.",
+          "Sign in or create your Vaulta account to manage your USD balance, virtual debit cards, and ACH transfers.",
       },
-      { property: "og:title", content: "Sign in to Meridian" },
+      { property: "og:title", content: "Sign in to Vaulta" },
       {
         property: "og:description",
         content: "Access your USD balance, virtual cards, and transfers.",
@@ -116,7 +116,7 @@ function AuthPage() {
   return (
     <div className="mx-auto flex min-h-screen max-w-[430px] flex-col justify-center px-5 py-10">
       <div className="animate-rise">
-        <p className="font-mono text-[10px] tracking-[0.28em] text-faint uppercase">Meridian</p>
+        <p className="font-mono text-[10px] tracking-[0.28em] text-faint uppercase">Vaulta</p>
         <h1 className="mt-2 font-display text-4xl leading-tight font-semibold">
           {mode === "signin" ? "Welcome back." : "Open your account."}
         </h1>

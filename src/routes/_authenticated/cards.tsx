@@ -11,13 +11,13 @@ import { cardsQuery, type Card } from "@/lib/banking";
 export const Route = createFileRoute("/_authenticated/cards")({
   head: () => ({
     meta: [
-      { title: "Card Management — Meridian Banking" },
+      { title: "Card Management — Vaulta Banking" },
       {
         name: "description",
         content:
           "Reveal virtual debit card details, copy the number, and freeze or unfreeze any card instantly.",
       },
-      { property: "og:title", content: "Card Management — Meridian Banking" },
+      { property: "og:title", content: "Card Management — Vaulta Banking" },
       {
         property: "og:description",
         content: "Reveal details and freeze or unfreeze your virtual debit cards.",

@@ -28,7 +28,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="mx-auto flex min-h-screen max-w-[430px] flex-col">
         <header className="flex animate-rise items-start justify-between px-5 pt-6 pb-4">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.28em] text-faint uppercase">Meridian</p>
+            <p className="font-mono text-[10px] tracking-[0.28em] text-faint uppercase">Vaulta</p>
             <p className="mt-1 text-sm text-muted">
               {greeting()},{" "}
               <span className="text-foreground">
