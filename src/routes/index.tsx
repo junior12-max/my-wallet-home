@@ -6,13 +6,13 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meridian — USD Banking, Virtual Cards & ACH Transfers" },
+      { title: "Vaulta — USD Banking, Virtual Cards & ACH Transfers" },
       {
         name: "description",
         content:
-          "Meridian is a private USD account with virtual debit cards, weekly spending insight, US bank ACH transfers and email or phone payments.",
+          "Vaulta is a private USD account with virtual debit cards, weekly spending insight, US bank ACH transfers and email or phone payments.",
       },
-      { property: "og:title", content: "Meridian — USD Banking & Virtual Cards" },
+      { property: "og:title", content: "Vaulta — USD Banking & Virtual Cards" },
       {
         property: "og:description",
         content:
@@ -37,7 +37,7 @@ function Landing() {
   return (
     <div className="mx-auto flex min-h-screen max-w-[430px] flex-col px-5 py-10">
       <p className="animate-rise font-mono text-[10px] tracking-[0.28em] text-faint uppercase">
-        Meridian
+        Vaulta
       </p>
 
       <h1 className="mt-8 animate-rise font-display text-[52px] leading-[0.95] font-semibold [animation-delay:60ms]">

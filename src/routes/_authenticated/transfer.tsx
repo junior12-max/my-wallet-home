@@ -9,13 +9,13 @@ import { accountQuery, money, recordTransfer } from "@/lib/banking";
 export const Route = createFileRoute("/_authenticated/transfer")({
   head: () => ({
     meta: [
-      { title: "Send & Receive — Meridian Banking" },
+      { title: "Send & Receive — Vaulta Banking" },
       {
         name: "description",
         content:
           "Move USD by US bank ACH transfer, send to an email or phone number, or start a PayPal payout.",
       },
-      { property: "og:title", content: "Send & Receive — Meridian Banking" },
+      { property: "og:title", content: "Send & Receive — Vaulta Banking" },
       {
         property: "og:description",
         content: "ACH transfers, email and phone payments, and PayPal payouts.",

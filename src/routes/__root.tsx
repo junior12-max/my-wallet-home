@@ -79,13 +79,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Meridian — USD Banking & Virtual Cards" },
+      { title: "Vaulta — USD Banking & Virtual Cards" },
       {
         name: "description",
         content:
           "A private USD account with virtual debit cards, ACH transfers and payments by email or phone.",
       },
-      { property: "og:title", content: "Meridian — USD Banking & Virtual Cards" },
+      { property: "og:title", content: "Vaulta — USD Banking & Virtual Cards" },
       {
         property: "og:description",
         content: "USD balance, virtual debit cards, ACH transfers and instant payments.",

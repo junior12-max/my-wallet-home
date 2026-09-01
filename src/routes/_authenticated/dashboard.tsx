@@ -17,13 +17,13 @@ import {
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Meridian Banking" },
+      { title: "Dashboard — Vaulta Banking" },
       {
         name: "description",
         content:
           "Your USD balance, weekly spending, recent transactions and virtual debit cards in one view.",
       },
-      { property: "og:title", content: "Dashboard — Meridian Banking" },
+      { property: "og:title", content: "Dashboard — Vaulta Banking" },
       {
         property: "og:description",
         content: "USD balance, weekly spending and virtual cards at a glance.",
