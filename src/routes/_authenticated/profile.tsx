@@ -1,0 +1,141 @@
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+
+import { AppShell } from "@/components/app-shell";
+import { supabase } from "@/integrations/supabase/client";
+import { accountQuery, initials, isAdminQuery, money, profileQuery } from "@/lib/banking";
+
+export const Route = createFileRoute("/_authenticated/profile")({
+  head: () => ({
+    meta: [
+      { title: "Profile & Settings — Vaulta Banking" },
+      {
+        name: "description",
+        content:
+          "Manage your Vaulta profile, review account details and security settings, and open the admin dashboard.",
+      },
+      { property: "og:title", content: "Profile & Settings — Vaulta Banking" },
+      {
+        property: "og:description",
+        content: "Profile, account details, security settings and admin access.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: ProfilePage,
+});
+
+function ProfilePage() {
+  const { data: profile } = useQuery(profileQuery);
+  const { data: account } = useQuery(accountQuery);
+  const { data: isAdmin } = useQuery(isAdminQuery);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [email, setEmail] = useState<string>("");
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? ""));
+  }, []);
+
+  async function signOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  }
+
+  return (
+    <AppShell>
+      <section className="px-5">
+        <div className="panel flex animate-rise items-center gap-4 p-5">
+          <span className="grid size-14 place-items-center rounded-full bg-accent-soft font-mono text-sm text-accent ring-1 ring-border">
+            {initials(profile?.full_name)}
+          </span>
+          <div className="min-w-0">
+            <p className="truncate font-display text-2xl leading-tight font-semibold">
+              {profile?.full_name ?? "Vaulta member"}
+            </p>
+            <p className="truncate font-mono text-[11px] text-muted">{email || "—"}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-4 px-5">
+        <p className="label-caps mb-2">Account</p>
+        <div className="panel animate-rise divide-y divide-border [animation-delay:120ms]">
+          <Row label="Account" value={account?.name ?? "Checking"} />
+          <Row label="Number" value={`•••• ${account?.account_number_last4 ?? "····"}`} />
+          <Row label="Balance" value={money(account?.balance_cents ?? 0)} />
+          <Row label="Status" value={account?.is_frozen ? "Frozen" : "Active"} />
+        </div>
+      </section>
+
+      <section className="mt-4 px-5">
+        <p className="label-caps mb-2">Settings</p>
+        <div className="panel animate-rise divide-y divide-border [animation-delay:180ms]">
+          <NavRow to="/cards" label="Card security" hint="Freeze, reveal, limits" />
+          <NavRow to="/finances" label="Statements & export" hint="Download CSV" />
+          <NavRow to="/transfer" label="Transfers" hint="ACH, email, PayPal" />
+        </div>
+      </section>
+
+      {isAdmin && (
+        <section className="mt-4 px-5">
+          <p className="label-caps mb-2">Administration</p>
+          <Link
+            to="/admin"
+            className="panel flex animate-rise items-center justify-between px-4 py-4 [animation-delay:220ms]"
+          >
+            <div>
+              <p className="text-[13px] font-semibold">Admin dashboard</p>
+              <p className="text-[11px] text-muted">Users, global transactions, freezes</p>
+            </div>
+            <span className="font-mono text-accent">→</span>
+          </Link>
+        </section>
+      )}
+
+      <section className="mt-4 px-5">
+        <button
+          onClick={signOut}
+          className="w-full rounded-xl bg-danger-soft py-3.5 text-[13px] font-semibold text-danger ring-1 ring-border"
+        >
+          Sign out
+        </button>
+      </section>
+
+      <div className="h-6" />
+    </AppShell>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between px-4 py-3">
+      <span className="label-caps">{label}</span>
+      <span className="font-mono text-[13px]">{value}</span>
+    </div>
+  );
+}
+
+function NavRow({
+  to,
+  label,
+  hint,
+}: {
+  to: "/cards" | "/finances" | "/transfer";
+  label: string;
+  hint: string;
+}) {
+  return (
+    <Link to={to} className="flex items-center justify-between px-4 py-3.5">
+      <div>
+        <p className="text-[13px] font-semibold">{label}</p>
+        <p className="text-[11px] text-muted">{hint}</p>
+      </div>
+      <span className="font-mono text-faint">›</span>
+    </Link>
+  );
+}
