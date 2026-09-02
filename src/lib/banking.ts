@@ -7,6 +7,7 @@ export type Account = {
   routing_number: string;
   balance_cents: number;
   currency: string;
+  is_frozen: boolean;
 };
 
 export type Card = {
@@ -67,7 +68,7 @@ export const accountQuery = {
   queryFn: async (): Promise<Account | null> => {
     const { data, error } = await supabase
       .from("accounts")
-      .select("id, name, account_number_last4, routing_number, balance_cents, currency")
+      .select("id, name, account_number_last4, routing_number, balance_cents, currency, is_frozen")
       .order("created_at", { ascending: true })
       .limit(1)
       .maybeSingle();
@@ -192,4 +193,80 @@ export async function recordTransfer(input: {
     .update({ balance_cents: input.balanceCents + delta })
     .eq("id", input.accountId);
   if (balError) throw balError;
+}
+
+/** True when the signed-in user holds the admin role. */
+export const isAdminQuery = {
+  queryKey: ["is-admin"],
+  queryFn: async (): Promise<boolean> => {
+    const { data, error } = await supabase.from("user_roles").select("role").eq("role", "admin");
+    if (error) throw error;
+    return (data ?? []).length > 0;
+  },
+};
+
+export type AdminAccount = Account & { user_id: string; created_at: string };
+
+export const adminAccountsQuery = {
+  queryKey: ["admin", "accounts"],
+  queryFn: async (): Promise<AdminAccount[]> => {
+    const { data, error } = await supabase
+      .from("accounts")
+      .select(
+        "id, name, account_number_last4, routing_number, balance_cents, currency, is_frozen, user_id, created_at",
+      )
+      .order("created_at", { ascending: true });
+    if (error) throw error;
+    return (data ?? []) as AdminAccount[];
+  },
+};
+
+export const adminProfilesQuery = {
+  queryKey: ["admin", "profiles"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, full_name, created_at")
+      .order("created_at", { ascending: true });
+    if (error) throw error;
+    return data ?? [];
+  },
+};
+
+export const adminTransactionsQuery = {
+  queryKey: ["admin", "transactions"],
+  queryFn: async (): Promise<(Transaction & { user_id: string })[]> => {
+    const { data, error } = await supabase
+      .from("transactions")
+      .select(
+        "id, merchant, category, amount_cents, direction, status, method, occurred_at, user_id",
+      )
+      .order("occurred_at", { ascending: false })
+      .limit(200);
+    if (error) throw error;
+    return (data ?? []) as (Transaction & { user_id: string })[];
+  },
+};
+
+const csvCell = (value: string | number) => `"${String(value).replace(/"/g, '""')}"`;
+
+/** Builds and downloads a CSV of the given transactions in the browser. */
+export function downloadTransactionsCsv(transactions: Transaction[]) {
+  const header = ["Date", "Merchant", "Category", "Method", "Direction", "Status", "Amount (USD)"];
+  const rows = transactions.map((tx) => [
+    new Date(tx.occurred_at).toISOString(),
+    tx.merchant,
+    tx.category,
+    tx.method,
+    tx.direction === "in" ? "credit" : "debit",
+    tx.status,
+    ((tx.direction === "in" ? 1 : -1) * (Math.abs(tx.amount_cents) / 100)).toFixed(2),
+  ]);
+  const csv = [header, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n");
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `vaulta-transactions-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
 }
