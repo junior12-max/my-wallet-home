@@ -6,9 +6,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { greeting, initials, profileQuery } from "@/lib/banking";
 
 const tabs = [
-  { to: "/dashboard", glyph: "▣", label: "Home" },
-  { to: "/transfer", glyph: "⇄", label: "Transfer" },
+  { to: "/dashboard", glyph: "⌂", label: "Home" },
+  { to: "/finances", glyph: "◵", label: "Finances" },
   { to: "/cards", glyph: "▤", label: "Cards" },
+  { to: "/profile", glyph: "◍", label: "Profile" },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -37,9 +38,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="grid size-8 place-items-center rounded-full bg-surface-2 font-mono text-[11px] text-accent ring-1 ring-border">
+            <Link
+              to="/profile"
+              className="grid size-8 place-items-center rounded-full bg-surface-2 font-mono text-[11px] text-accent ring-1 ring-border"
+            >
               {initials(profile?.full_name)}
-            </span>
+            </Link>
             <button
               onClick={signOut}
               className="font-mono text-[10px] tracking-[0.18em] text-faint uppercase transition-colors hover:text-accent"
@@ -49,19 +53,20 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </header>
 
-        <main className="flex-1">{children}</main>
+        {/* pb reserves room for the fixed tab bar */}
+        <main className="flex-1 pb-24">{children}</main>
 
-        <nav className="sticky bottom-0 bg-surface/95 ring-1 ring-border backdrop-blur">
-          <div className="grid grid-cols-3">
+        <nav className="fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 border-t border-border bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
+          <div className="grid grid-cols-4">
             {tabs.map((tab) => (
               <Link
                 key={tab.to}
                 to={tab.to}
-                className="flex flex-col items-center gap-1 py-3.5 text-muted transition-colors"
+                className="group flex flex-col items-center gap-1 py-3 text-faint transition-colors active:scale-95"
                 activeProps={{ className: "text-accent" }}
               >
-                <span className="font-mono text-sm">{tab.glyph}</span>
-                <span className="font-mono text-[10px] tracking-wider uppercase">{tab.label}</span>
+                <span className="text-base leading-none">{tab.glyph}</span>
+                <span className="font-mono text-[9px] tracking-[0.16em] uppercase">{tab.label}</span>
               </Link>
             ))}
           </div>
