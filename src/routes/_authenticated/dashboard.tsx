@@ -76,7 +76,7 @@ function Dashboard() {
       <section className="mt-4 grid grid-cols-3 gap-2 px-5">
         <QuickAction to="/transfer" glyph="→" label="Send" delay="120ms" />
         <QuickAction to="/transfer" glyph="↓" label="Receive" delay="180ms" />
-        <QuickAction to="/transfer" glyph="◈" label="Pay Bills" delay="240ms" />
+        <QuickAction to="/transfer" glyph="+" label="Add Cash" delay="240ms" />
       </section>
 
       {/* spending chart */}
