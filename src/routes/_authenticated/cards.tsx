@@ -52,7 +52,7 @@ function CardsPage() {
 
   return (
     <AppShell>
-      <section className="px-5">
+      <section>
         <p className="label-caps animate-rise">Virtual debit cards</p>
         <div className="mt-3 space-y-4">
           {(cards ?? []).map((card, index) => {
@@ -97,14 +97,14 @@ function CardsPage() {
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setRevealed((prev) => ({ ...prev, [card.id]: !prev[card.id] }))}
-                    className="rounded-xl bg-surface-2 py-3 text-[13px] font-semibold ring-1 ring-border transition-colors hover:bg-surface"
+                    className="rounded-xl bg-surface-2 py-3 text-[13px] font-semibold ring-1 ring-border transition-all duration-150 hover:bg-surface active:scale-95"
                   >
                     {isRevealed ? "Hide details" : "Reveal details"}
                   </button>
                   <button
                     disabled={toggleFreeze.isPending}
                     onClick={() => toggleFreeze.mutate(card)}
-                    className={`rounded-xl py-3 text-[13px] font-semibold transition-colors disabled:opacity-50 ${
+                    className={`rounded-xl py-3 text-[13px] font-semibold transition-all duration-150 hover:opacity-80 active:scale-95 disabled:opacity-50 ${
                       card.is_frozen
                         ? "bg-accent text-accent-foreground"
                         : "bg-danger-soft text-danger ring-1 ring-border"

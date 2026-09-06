@@ -102,7 +102,7 @@ function TransferPage() {
 
   return (
     <AppShell>
-      <section className="px-5">
+      <section>
         <div className="panel animate-rise p-5">
           <p className="label-caps">Available to send</p>
           <p className="mt-2 font-display text-4xl leading-none font-semibold">
@@ -115,13 +115,13 @@ function TransferPage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <div className="flex gap-1 rounded-full bg-surface p-1 ring-1 ring-border">
           {tabs.map((item) => (
             <button
               key={item.id}
               onClick={() => setTab(item.id)}
-              className={`flex-1 rounded-full py-2 font-mono text-[10px] tracking-[0.12em] uppercase transition-colors ${
+              className={`flex-1 rounded-full py-2 font-mono text-[10px] tracking-[0.12em] uppercase transition-all duration-150 active:scale-95 ${
                 tab === item.id ? "bg-accent text-accent-foreground" : "text-muted"
               }`}
             >
@@ -131,7 +131,7 @@ function TransferPage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         {tab === "ach" && (
           <div className="panel animate-rise space-y-3 p-5">
             <p className="label-caps">US bank ACH transfer</p>
@@ -183,7 +183,7 @@ function TransferPage() {
                 <button
                   key={dir}
                   onClick={() => setContactDirection(dir)}
-                  className={`flex-1 rounded-full py-2 text-[12px] font-semibold transition-colors ${
+                  className={`flex-1 rounded-full py-2 text-[12px] font-semibold transition-all duration-150 active:scale-95 ${
                     contactDirection === dir ? "bg-accent text-accent-foreground" : "text-muted"
                   }`}
                 >

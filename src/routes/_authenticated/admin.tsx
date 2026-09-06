@@ -43,7 +43,7 @@ function AdminPage() {
   if (isLoading) {
     return (
       <AppShell>
-        <p className="px-5 text-sm text-muted">Checking permissions…</p>
+        <p className="text-sm text-muted">Checking permissions…</p>
       </AppShell>
     );
   }
@@ -51,7 +51,7 @@ function AdminPage() {
   if (!isAdmin) {
     return (
       <AppShell>
-        <section className="px-5">
+        <section>
           <div className="panel p-5">
             <p className="label-caps">Restricted</p>
             <p className="mt-2 text-sm text-muted">
@@ -99,7 +99,7 @@ function AdminConsole() {
 
   return (
     <AppShell>
-      <section className="px-5">
+      <section>
         <div className="panel animate-rise p-5">
           <p className="label-caps">Admin console</p>
           <p className="mt-2 font-display text-[38px] leading-none font-semibold">
@@ -112,7 +112,7 @@ function AdminConsole() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <p className="label-caps mb-2">Members & accounts</p>
         <div className="panel divide-y divide-border">
           {(accounts ?? []).map((account) => (
@@ -145,7 +145,7 @@ function AdminConsole() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <p className="label-caps mb-2">Global transactions</p>
         <div className="panel divide-y divide-border">
           {(transactions ?? []).slice(0, 40).map((tx) => (

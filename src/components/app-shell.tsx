@@ -26,8 +26,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex min-h-screen max-w-[430px] flex-col">
-        <header className="flex animate-rise items-start justify-between px-5 pt-6 pb-4">
+      <div className="mx-auto flex min-h-screen max-w-md flex-col">
+        <header className="flex animate-rise items-start justify-between px-4 pt-6 pb-4">
           <div>
             <p className="font-mono text-[10px] tracking-[0.28em] text-faint uppercase">Vaulta</p>
             <p className="mt-1 text-sm text-muted">
@@ -54,15 +54,15 @@ export function AppShell({ children }: { children: ReactNode }) {
         </header>
 
         {/* pb reserves room for the fixed tab bar */}
-        <main className="flex-1 pb-24">{children}</main>
+        <main className="flex-1 px-4 pb-24">{children}</main>
 
-        <nav className="fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 border-t border-border bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
+        <nav className="fixed bottom-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2 border-t border-border bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
           <div className="grid grid-cols-4">
             {tabs.map((tab) => (
               <Link
                 key={tab.to}
                 to={tab.to}
-                className="group flex flex-col items-center gap-1 py-3 text-faint transition-colors active:scale-95"
+                className="group flex flex-col items-center gap-1 py-3 text-faint transition-all duration-150 hover:text-foreground active:scale-95"
                 activeProps={{ className: "text-accent" }}
               >
                 <span className="text-base leading-none">{tab.glyph}</span>

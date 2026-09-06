@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
+import { SendMoneyModal } from "@/components/send-money-modal";
 import { VirtualCard } from "@/components/virtual-card";
 import {
   accountQuery,
@@ -35,7 +37,12 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
 
+const press = "transition-all duration-150 active:scale-95";
+
 function Dashboard() {
+  const navigate = useNavigate();
+  const [modal, setModal] = useState<null | "out" | "in">(null);
+  const [pending, setPending] = useState<null | "send" | "receive" | "cash">(null);
   const { data: account } = useQuery(accountQuery);
   const { data: cards } = useQuery(cardsQuery);
   const { data: transactions } = useQuery(transactionsQuery);
@@ -46,7 +53,7 @@ function Dashboard() {
   return (
     <AppShell>
       {/* balance hero */}
-      <section className="px-5">
+      <section>
         <div className="panel relative animate-rise overflow-hidden p-5">
           <div className="pointer-events-none absolute -top-12 -right-10 h-40 w-40 rounded-full bg-accent/10 blur-2xl" />
           <div className="relative">
@@ -73,14 +80,50 @@ function Dashboard() {
       </section>
 
       {/* quick actions */}
-      <section className="mt-4 grid grid-cols-3 gap-2 px-5">
-        <QuickAction to="/transfer" glyph="→" label="Send" delay="120ms" />
-        <QuickAction to="/transfer" glyph="↓" label="Receive" delay="180ms" />
-        <QuickAction to="/transfer" glyph="+" label="Add Cash" delay="240ms" />
+      <section className="mt-4 grid grid-cols-3 gap-2">
+        <QuickAction
+          glyph="→"
+          label="Send"
+          delay="120ms"
+          loading={pending === "send"}
+          onClick={() => {
+            setPending("send");
+            window.setTimeout(() => {
+              setPending(null);
+              setModal("out");
+            }, 350);
+          }}
+        />
+        <QuickAction
+          glyph="↓"
+          label="Receive"
+          delay="180ms"
+          loading={pending === "receive"}
+          onClick={() => {
+            setPending("receive");
+            window.setTimeout(() => {
+              setPending(null);
+              navigate({ to: "/finances" });
+            }, 350);
+          }}
+        />
+        <QuickAction
+          glyph="+"
+          label="Add Cash"
+          delay="240ms"
+          loading={pending === "cash"}
+          onClick={() => {
+            setPending("cash");
+            window.setTimeout(() => {
+              setPending(null);
+              setModal("in");
+            }, 350);
+          }}
+        />
       </section>
 
       {/* spending chart */}
-      <section className="mt-5 px-5">
+      <section className="mt-5">
         <div className="panel animate-rise p-4 [animation-delay:300ms]">
           <div className="flex items-center justify-between">
             <p className="label-caps">Spending · 7 days</p>
@@ -110,7 +153,7 @@ function Dashboard() {
       </section>
 
       {/* virtual card */}
-      <section className="mt-5 px-5">
+      <section className="mt-5">
         <div className="mb-2 flex animate-rise items-center justify-between [animation-delay:600ms]">
           <p className="label-caps">Your card</p>
           <Link to="/cards" className="font-mono text-[11px] text-accent">
@@ -125,7 +168,7 @@ function Dashboard() {
       </section>
 
       {/* transactions */}
-      <section className="mt-5 px-5">
+      <section className="mt-5">
         <p className="label-caps mb-2 animate-rise [animation-delay:700ms]">Recent activity</p>
         <div className="panel divide-y divide-border overflow-hidden">
           {(transactions ?? []).slice(0, 8).map((tx, index) => (
@@ -163,30 +206,43 @@ function Dashboard() {
         </div>
       </section>
 
+      <SendMoneyModal
+        open={modal !== null}
+        direction={modal ?? "out"}
+        onClose={() => setModal(null)}
+      />
+
       <div className="h-6" />
     </AppShell>
   );
 }
 
 function QuickAction({
-  to,
   glyph,
   label,
   delay,
+  loading,
+  onClick,
 }: {
-  to: "/transfer";
   glyph: string;
   label: string;
   delay: string;
+  loading: boolean;
+  onClick: () => void;
 }) {
   return (
-    <Link
-      to={to}
-      className="panel animate-rise px-3 py-3 transition-colors hover:bg-surface-2 active:translate-y-px"
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className={`panel animate-rise px-3 py-3 text-left hover:bg-surface-2 disabled:opacity-70 ${press} transition-all duration-150 active:scale-95`}
       style={{ animationDelay: delay }}
     >
-      <span className="font-mono text-xs text-accent">{glyph}</span>
-      <p className="mt-2 text-[13px] font-semibold">{label}</p>
-    </Link>
+      {loading ? (
+        <span className="block size-3.5 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
+      ) : (
+        <span className="font-mono text-xs text-accent">{glyph}</span>
+      )}
+      <p className="mt-2 text-[13px] font-semibold">{loading ? "Opening…" : label}</p>
+    </button>
   );
 }

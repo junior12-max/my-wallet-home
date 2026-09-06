@@ -60,7 +60,7 @@ function FinancesPage() {
 
   return (
     <AppShell>
-      <section className="px-5">
+      <section>
         <div className="panel animate-rise p-5">
           <p className="label-caps">Available balance</p>
           <div className="mt-2 flex items-end gap-1">
@@ -76,7 +76,7 @@ function FinancesPage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <div className="panel animate-rise p-4 [animation-delay:120ms]">
           <div className="flex items-center justify-between">
             <p className="label-caps">Spending · 7 days</p>
@@ -105,7 +105,7 @@ function FinancesPage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <p className="label-caps mb-2 animate-rise [animation-delay:200ms]">Account details</p>
         <div className="panel animate-rise divide-y divide-border [animation-delay:240ms]">
           <Row label="Account name" value={account?.name ?? "Checking"} />
@@ -116,10 +116,10 @@ function FinancesPage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <button
           onClick={exportCsv}
-          className="w-full animate-rise rounded-xl bg-accent py-3.5 text-[13px] font-semibold text-accent-foreground transition-opacity [animation-delay:280ms] active:opacity-80"
+          className="w-full animate-rise rounded-xl bg-accent py-3.5 text-[13px] font-semibold text-accent-foreground transition-all duration-150 [animation-delay:280ms] hover:bg-accent/80 active:scale-95"
         >
           Download CSV
         </button>
@@ -128,7 +128,7 @@ function FinancesPage() {
         </p>
       </section>
 
-      <section className="mt-5 px-5">
+      <section className="mt-5">
         <p className="label-caps mb-2">Transaction history</p>
         <div className="panel divide-y divide-border overflow-hidden">
           {list.map((tx) => (
