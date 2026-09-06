@@ -53,7 +53,7 @@ function Dashboard() {
   return (
     <AppShell>
       {/* balance hero */}
-      <section ">
+      <section>
         <div className="panel relative animate-rise overflow-hidden p-5">
           <div className="pointer-events-none absolute -top-12 -right-10 h-40 w-40 rounded-full bg-accent/10 blur-2xl" />
           <div className="relative">
@@ -123,7 +123,7 @@ function Dashboard() {
       </section>
 
       {/* spending chart */}
-      <section className="mt-5"">
+      <section className="mt-5">
         <div className="panel animate-rise p-4 [animation-delay:300ms]">
           <div className="flex items-center justify-between">
             <p className="label-caps">Spending · 7 days</p>
@@ -153,7 +153,7 @@ function Dashboard() {
       </section>
 
       {/* virtual card */}
-      <section className="mt-5"">
+      <section className="mt-5">
         <div className="mb-2 flex animate-rise items-center justify-between [animation-delay:600ms]">
           <p className="label-caps">Your card</p>
           <Link to="/cards" className="font-mono text-[11px] text-accent">
@@ -168,7 +168,7 @@ function Dashboard() {
       </section>
 
       {/* transactions */}
-      <section className="mt-5"">
+      <section className="mt-5">
         <p className="label-caps mb-2 animate-rise [animation-delay:700ms]">Recent activity</p>
         <div className="panel divide-y divide-border overflow-hidden">
           {(transactions ?? []).slice(0, 8).map((tx, index) => (
