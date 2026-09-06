@@ -234,7 +234,7 @@ function QuickAction({
     <button
       onClick={onClick}
       disabled={loading}
-      className={`panel animate-rise px-3 py-3 text-left hover:bg-surface-2 disabled:opacity-70 ${press}`}
+      className={`panel animate-rise px-3 py-3 text-left hover:bg-surface-2 disabled:opacity-70 ${press} transition-all duration-150 active:scale-95`}
       style={{ animationDelay: delay }}
     >
       {loading ? (

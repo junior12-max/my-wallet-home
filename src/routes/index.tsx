@@ -35,7 +35,7 @@ function Landing() {
   }, [navigate]);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[430px] flex-col px-5 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6">
       <p className="animate-rise font-mono text-[10px] tracking-[0.28em] text-faint uppercase">
         Vaulta
       </p>
@@ -69,7 +69,7 @@ function Landing() {
       <div className="mt-8 animate-rise [animation-delay:240ms]">
         <Link
           to="/auth"
-          className="block rounded-xl bg-accent py-3.5 text-center text-sm font-semibold text-accent-foreground"
+          className="block rounded-xl bg-accent py-3.5 text-center text-sm font-semibold text-accent-foreground transition-all duration-150 active:scale-95"
         >
           Open your account
         </Link>

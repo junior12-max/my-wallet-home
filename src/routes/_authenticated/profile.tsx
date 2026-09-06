@@ -86,7 +86,7 @@ function ProfilePage() {
           <p className="label-caps mb-2">Administration</p>
           <Link
             to="/admin"
-            className="panel flex animate-rise items-center justify-between px-4 py-4 [animation-delay:220ms]"
+            className="panel flex animate-rise items-center justify-between px-4 py-4 [animation-delay:220ms] transition-all duration-150 active:scale-95"
           >
             <div>
               <p className="text-[13px] font-semibold">Admin dashboard</p>
@@ -100,7 +100,7 @@ function ProfilePage() {
       <section className="mt-4">
         <button
           onClick={signOut}
-          className="w-full rounded-xl bg-danger-soft py-3.5 text-[13px] font-semibold text-danger ring-1 ring-border"
+          className="w-full rounded-xl bg-danger-soft py-3.5 text-[13px] font-semibold text-danger ring-1 ring-border transition-all duration-150 active:scale-95"
         >
           Sign out
         </button>

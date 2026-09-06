@@ -91,7 +91,7 @@ function AuthPage() {
 
   if (checkEmail) {
     return (
-      <div className="mx-auto flex min-h-screen max-w-[430px] flex-col justify-center px-6">
+      <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
         <div className="panel animate-rise p-6">
           <p className="label-caps">Almost there</p>
           <h1 className="mt-3 font-display text-3xl font-semibold">Check your email</h1>
@@ -114,7 +114,7 @@ function AuthPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[430px] flex-col justify-center px-5 py-10">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-6">
       <div className="animate-rise">
         <p className="font-mono text-[10px] tracking-[0.28em] text-faint uppercase">Vaulta</p>
         <h1 className="mt-2 font-display text-4xl leading-tight font-semibold">
@@ -154,7 +154,7 @@ function AuthPage() {
         <button
           type="submit"
           disabled={busy}
-          className="mt-2 w-full rounded-xl bg-accent py-3 text-sm font-semibold text-accent-foreground transition-opacity disabled:opacity-50"
+          className="mt-2 w-full rounded-xl bg-accent py-3 text-sm font-semibold text-accent-foreground disabled:opacity-50 transition-all duration-150 active:scale-95"
         >
           {mode === "signin" ? "Sign in" : "Create account"}
         </button>
@@ -162,7 +162,7 @@ function AuthPage() {
           type="button"
           onClick={handleGoogle}
           disabled={busy}
-          className="w-full rounded-xl bg-surface-2 py-3 text-sm font-semibold ring-1 ring-border transition-colors hover:bg-surface disabled:opacity-50"
+          className="w-full rounded-xl bg-surface-2 py-3 text-sm font-semibold ring-1 ring-border hover:bg-surface disabled:opacity-50 transition-all duration-150 active:scale-95"
         >
           Continue with Google
         </button>
