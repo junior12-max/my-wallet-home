@@ -48,7 +48,7 @@ function ProfilePage() {
 
   return (
     <AppShell>
-      <section className="px-5">
+      <section>
         <div className="panel flex animate-rise items-center gap-4 p-5">
           <span className="grid size-14 place-items-center rounded-full bg-accent-soft font-mono text-sm text-accent ring-1 ring-border">
             {initials(profile?.full_name)}
@@ -62,7 +62,7 @@ function ProfilePage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <p className="label-caps mb-2">Account</p>
         <div className="panel animate-rise divide-y divide-border [animation-delay:120ms]">
           <Row label="Account" value={account?.name ?? "Checking"} />
@@ -72,7 +72,7 @@ function ProfilePage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <p className="label-caps mb-2">Settings</p>
         <div className="panel animate-rise divide-y divide-border [animation-delay:180ms]">
           <NavRow to="/cards" label="Card security" hint="Freeze, reveal, limits" />
@@ -82,7 +82,7 @@ function ProfilePage() {
       </section>
 
       {isAdmin && (
-        <section className="mt-4 px-5">
+        <section className="mt-4">
           <p className="label-caps mb-2">Administration</p>
           <Link
             to="/admin"
@@ -97,7 +97,7 @@ function ProfilePage() {
         </section>
       )}
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <button
           onClick={signOut}
           className="w-full rounded-xl bg-danger-soft py-3.5 text-[13px] font-semibold text-danger ring-1 ring-border"

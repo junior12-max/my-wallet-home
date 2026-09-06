@@ -54,7 +54,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </header>
 
         {/* pb reserves room for the fixed tab bar */}
-        <main className="flex-1 pb-24">{children}</main>
+        <main className="flex-1 px-4 pb-24">{children}</main>
 
         <nav className="fixed bottom-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2 border-t border-border bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
           <div className="grid grid-cols-4">
@@ -62,7 +62,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 key={tab.to}
                 to={tab.to}
-                className="group flex flex-col items-center gap-1 py-3 text-faint transition-colors active:scale-95"
+                className="group flex flex-col items-center gap-1 py-3 text-faint transition-all duration-150 hover:text-foreground active:scale-95"
                 activeProps={{ className: "text-accent" }}
               >
                 <span className="text-base leading-none">{tab.glyph}</span>

@@ -52,7 +52,7 @@ function CardsPage() {
 
   return (
     <AppShell>
-      <section className="px-5">
+      <section>
         <p className="label-caps animate-rise">Virtual debit cards</p>
         <div className="mt-3 space-y-4">
           {(cards ?? []).map((card, index) => {

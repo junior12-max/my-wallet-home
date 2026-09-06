@@ -102,7 +102,7 @@ function TransferPage() {
 
   return (
     <AppShell>
-      <section className="px-5">
+      <section>
         <div className="panel animate-rise p-5">
           <p className="label-caps">Available to send</p>
           <p className="mt-2 font-display text-4xl leading-none font-semibold">
@@ -115,7 +115,7 @@ function TransferPage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         <div className="flex gap-1 rounded-full bg-surface p-1 ring-1 ring-border">
           {tabs.map((item) => (
             <button
@@ -131,7 +131,7 @@ function TransferPage() {
         </div>
       </section>
 
-      <section className="mt-4 px-5">
+      <section className="mt-4">
         {tab === "ach" && (
           <div className="panel animate-rise space-y-3 p-5">
             <p className="label-caps">US bank ACH transfer</p>
