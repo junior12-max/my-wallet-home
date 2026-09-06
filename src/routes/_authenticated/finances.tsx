@@ -119,7 +119,7 @@ function FinancesPage() {
       <section className="mt-4">
         <button
           onClick={exportCsv}
-          className="w-full animate-rise rounded-xl bg-accent py-3.5 text-[13px] font-semibold text-accent-foreground [animation-delay:280ms] active:opacity-80 transition-all duration-150 active:scale-95"
+          className="w-full animate-rise rounded-xl bg-accent py-3.5 text-[13px] font-semibold text-accent-foreground transition-all duration-150 [animation-delay:280ms] hover:bg-accent/80 active:scale-95"
         >
           Download CSV
         </button>
