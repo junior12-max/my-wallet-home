@@ -100,7 +100,7 @@ function ProfilePage() {
       <section className="mt-4">
         <button
           onClick={signOut}
-          className="w-full rounded-xl bg-danger-soft py-3.5 text-[13px] font-semibold text-danger ring-1 ring-border transition-all duration-150 active:scale-95"
+          className="w-full rounded-xl bg-danger-soft py-3.5 text-[13px] font-semibold text-danger ring-1 ring-border transition-all duration-150 hover:bg-danger-soft/80 active:scale-95"
         >
           Sign out
         </button>
@@ -130,7 +130,7 @@ function NavRow({
   hint: string;
 }) {
   return (
-    <Link to={to} className="flex items-center justify-between px-4 py-3.5">
+    <Link to={to} className="flex items-center justify-between px-4 py-3.5 transition-all duration-150 hover:bg-surface-2 active:scale-95">
       <div>
         <p className="text-[13px] font-semibold">{label}</p>
         <p className="text-[11px] text-muted">{hint}</p>

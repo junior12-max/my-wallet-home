@@ -121,7 +121,7 @@ function TransferPage() {
             <button
               key={item.id}
               onClick={() => setTab(item.id)}
-              className={`flex-1 rounded-full py-2 font-mono text-[10px] tracking-[0.12em] uppercase transition-colors ${
+              className={`flex-1 rounded-full py-2 font-mono text-[10px] tracking-[0.12em] uppercase transition-all duration-150 active:scale-95 ${
                 tab === item.id ? "bg-accent text-accent-foreground" : "text-muted"
               }`}
             >
@@ -183,7 +183,7 @@ function TransferPage() {
                 <button
                   key={dir}
                   onClick={() => setContactDirection(dir)}
-                  className={`flex-1 rounded-full py-2 text-[12px] font-semibold transition-colors ${
+                  className={`flex-1 rounded-full py-2 text-[12px] font-semibold transition-all duration-150 active:scale-95 ${
                     contactDirection === dir ? "bg-accent text-accent-foreground" : "text-muted"
                   }`}
                 >
