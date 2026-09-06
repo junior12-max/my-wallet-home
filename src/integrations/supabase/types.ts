@@ -118,6 +118,138 @@ export type Database = {
           },
         ]
       }
+      external_accounts: {
+        Row: {
+          account_number_last4: string | null
+          created_at: string
+          id: string
+          kind: string
+          label: string
+          provider: string | null
+          provider_reference: string | null
+          routing_number_last4: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          wallet_handle: string | null
+        }
+        Insert: {
+          account_number_last4?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          provider?: string | null
+          provider_reference?: string | null
+          routing_number_last4?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          wallet_handle?: string | null
+        }
+        Update: {
+          account_number_last4?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          provider?: string | null
+          provider_reference?: string | null
+          routing_number_last4?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          wallet_handle?: string | null
+        }
+        Relationships: []
+      }
+      journal_entries: {
+        Row: {
+          account_id: string | null
+          amount_cents: number
+          created_at: string
+          currency: string
+          direction: string
+          id: string
+          memo: string | null
+          transaction_id: string | null
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          amount_cents: number
+          created_at?: string
+          currency?: string
+          direction?: string
+          id?: string
+          memo?: string | null
+          transaction_id?: string | null
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          direction?: string
+          id?: string
+          memo?: string | null
+          transaction_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journal_entries_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "journal_entries_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kyc_verifications: {
+        Row: {
+          created_at: string
+          decided_at: string | null
+          details: Json | null
+          id: string
+          provider: string
+          provider_reference: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          decided_at?: string | null
+          details?: Json | null
+          id?: string
+          provider?: string
+          provider_reference?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          decided_at?: string | null
+          details?: Json | null
+          id?: string
+          provider?: string
+          provider_reference?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
