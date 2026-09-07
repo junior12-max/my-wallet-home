@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 
 /**
- * Full-screen Vaulta splash shown once per browser session on initial load.
- * Fades out after 1.5s, then unmounts.
+ * Full-screen Vaulta splash rendered on initial load (server-rendered so there
+ * is no flash of the page beneath it). Fades out after 1.5s, then unmounts.
  */
 export function SplashScreen() {
-  const [state, setState] = useState<"hidden" | "visible" | "leaving">("hidden");
+  const [state, setState] = useState<"visible" | "leaving" | "hidden">("visible");
 
   useEffect(() => {
-    if (sessionStorage.getItem("vaulta-splash-seen")) return;
-    sessionStorage.setItem("vaulta-splash-seen", "1");
-    setState("visible");
     const leave = setTimeout(() => setState("leaving"), 1500);
-    const done = setTimeout(() => setState("hidden"), 2100);
+    const done = setTimeout(() => setState("hidden"), 2050);
     return () => {
       clearTimeout(leave);
       clearTimeout(done);
@@ -28,14 +25,16 @@ export function SplashScreen() {
         state === "leaving" ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
-      <div className="flex animate-rise flex-col items-center">
-        <div className="grid size-20 place-items-center rounded-3xl bg-brand-soft ring-1 ring-brand/30">
+      <div className="flex flex-col items-center">
+        <div className="grid size-20 animate-rise place-items-center rounded-3xl bg-brand-soft ring-1 ring-brand/30">
           <span className="font-display text-5xl leading-none font-semibold text-brand">V</span>
         </div>
-        <p className="mt-5 font-mono text-[11px] tracking-[0.34em] text-foreground uppercase">
+        <p className="mt-5 animate-rise font-mono text-[11px] tracking-[0.34em] text-foreground uppercase [animation-delay:80ms]">
           Vaulta
         </p>
-        <p className="mt-2 text-[12px] text-muted">Private USD banking</p>
+        <p className="mt-2 animate-rise text-[12px] text-muted [animation-delay:140ms]">
+          Private USD banking
+        </p>
         <span className="mt-7 size-5 animate-spin rounded-full border-2 border-brand/25 border-t-brand" />
       </div>
     </div>
