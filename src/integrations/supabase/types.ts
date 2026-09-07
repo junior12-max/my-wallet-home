@@ -256,6 +256,7 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          status: string
           updated_at: string
         }
         Insert: {
@@ -263,6 +264,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          status?: string
           updated_at?: string
         }
         Update: {
@@ -270,7 +272,47 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          admin_note: string | null
+          category: string
+          contact_email: string | null
+          created_at: string
+          id: string
+          message: string
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          category?: string
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          category?: string
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -360,6 +402,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_suspended: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
