@@ -21,6 +21,8 @@
   --color-border: hsl(40 30% 93% / 0.08);
   --color-danger: hsl(6 70% 60%);
   --color-danger-soft: hsl(6 70% 60% / 0.14);
+  --color-brand: hsl(214 92% 60%);
+  --color-brand-soft: hsl(214 92% 60% / 0.14);
 
   --font-display: "Cormorant Garamond", ui-serif, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
