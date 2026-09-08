@@ -28,8 +28,14 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
   if (!open) return null;
 
   async function submit() {
-    if (subject.trim().length < 3) return toast.error("Add a short subject");
-    if (message.trim().length < 10) return toast.error("Tell us a little more");
+    if (subject.trim().length < 3) {
+      toast.error("Add a short subject");
+      return;
+    }
+    if (message.trim().length < 10) {
+      toast.error("Tell us a little more");
+      return;
+    }
     setSending(true);
     try {
       const id = await createSupportTicket({
