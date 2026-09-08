@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
+import { SupportModal } from "@/components/support-modal";
 import { supabase } from "@/integrations/supabase/client";
 import { accountQuery, initials, isAdminQuery, money, profileQuery } from "@/lib/banking";
 
@@ -34,6 +35,7 @@ function ProfilePage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [email, setEmail] = useState<string>("");
+  const [supportOpen, setSupportOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? ""));
@@ -68,7 +70,16 @@ function ProfilePage() {
           <Row label="Account" value={account?.name ?? "Checking"} />
           <Row label="Number" value={`•••• ${account?.account_number_last4 ?? "····"}`} />
           <Row label="Balance" value={money(account?.balance_cents ?? 0)} />
-          <Row label="Status" value={account?.is_frozen ? "Frozen" : "Active"} />
+            <Row
+            label="Status"
+            value={
+              profile?.status === "suspended"
+                ? "Suspended"
+                : account?.is_frozen
+                  ? "Frozen"
+                  : "Active"
+            }
+          />
         </div>
       </section>
 
@@ -78,6 +89,16 @@ function ProfilePage() {
           <NavRow to="/cards" label="Card security" hint="Freeze, reveal, limits" />
           <NavRow to="/finances" label="Statements & export" hint="Download CSV" />
           <NavRow to="/transfer" label="Transfers" hint="ACH, email, PayPal" />
+          <button
+            onClick={() => setSupportOpen(true)}
+            className="flex w-full items-center justify-between px-4 py-3.5 text-left transition-all duration-150 hover:bg-surface-2 active:scale-95"
+          >
+            <div>
+              <p className="text-[13px] font-semibold">Help &amp; support</p>
+              <p className="text-[11px] text-muted">Contact our team, track requests</p>
+            </div>
+            <span className="font-mono text-faint">›</span>
+          </button>
         </div>
       </section>
 
@@ -105,6 +126,8 @@ function ProfilePage() {
           Sign out
         </button>
       </section>
+
+      <SupportModal open={supportOpen} onClose={() => setSupportOpen(false)} />
 
       <div className="h-6" />
     </AppShell>

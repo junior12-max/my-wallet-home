@@ -109,7 +109,7 @@ export const profileQuery = {
   queryFn: async () => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, full_name")
+      .select("id, full_name, status")
       .limit(1)
       .maybeSingle();
     if (error) throw error;
@@ -226,7 +226,7 @@ export const adminProfilesQuery = {
   queryFn: async () => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, full_name, created_at")
+      .select("id, full_name, status, created_at")
       .order("created_at", { ascending: true });
     if (error) throw error;
     return data ?? [];
@@ -269,4 +269,86 @@ export function downloadTransactionsCsv(transactions: Transaction[]) {
   link.download = `vaulta-transactions-${new Date().toISOString().slice(0, 10)}.csv`;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+/* ---------------------------------------------------------------- support */
+
+export type SupportTicket = {
+  id: string;
+  user_id: string;
+  subject: string;
+  message: string;
+  category: string;
+  status: string;
+  admin_note: string | null;
+  contact_email: string | null;
+  created_at: string;
+};
+
+export const myTicketsQuery = {
+  queryKey: ["support-tickets", "mine"],
+  queryFn: async (): Promise<SupportTicket[]> => {
+    const { data, error } = await supabase
+      .from("support_tickets")
+      .select("id, user_id, subject, message, category, status, admin_note, contact_email, created_at")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as SupportTicket[];
+  },
+};
+
+export const adminTicketsQuery = {
+  queryKey: ["admin", "support-tickets"],
+  queryFn: async (): Promise<SupportTicket[]> => {
+    const { data, error } = await supabase
+      .from("support_tickets")
+      .select("id, user_id, subject, message, category, status, admin_note, contact_email, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error) throw error;
+    return (data ?? []) as SupportTicket[];
+  },
+};
+
+export async function createSupportTicket(input: {
+  subject: string;
+  message: string;
+  category: string;
+  contactEmail?: string | null;
+}) {
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData.user) throw userError ?? new Error("Not signed in");
+  const { data, error } = await supabase
+    .from("support_tickets")
+    .insert({
+      user_id: userData.user.id,
+      subject: input.subject,
+      message: input.message,
+      category: input.category,
+      contact_email: input.contactEmail ?? userData.user.email ?? null,
+    })
+    .select("id")
+    .single();
+  if (error) throw error;
+  return data.id as string;
+}
+
+export async function setTicketStatus(id: string, status: string) {
+  const { error } = await supabase.from("support_tickets").update({ status }).eq("id", id);
+  if (error) throw error;
+}
+
+/* ------------------------------------------------------- admin: members */
+
+export async function setMemberStatus(userId: string, status: "active" | "suspended") {
+  const { error } = await supabase.from("profiles").update({ status }).eq("id", userId);
+  if (error) throw error;
+}
+
+export async function setAccountBalance(accountId: string, balanceCents: number) {
+  const { error } = await supabase
+    .from("accounts")
+    .update({ balance_cents: balanceCents })
+    .eq("id", accountId);
+  if (error) throw error;
 }
