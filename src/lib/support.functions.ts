@@ -41,7 +41,7 @@ ${ticket.message}`;
         {
           from,
           to,
-          reply_to: ticket.contact_email ?? undefined,
+          ...(ticket.contact_email ? { reply_to: ticket.contact_email } : {}),
           subject: `[Vaulta support] ${ticket.subject}`,
           text: body,
           html: `<h2>${ticket.subject}</h2><pre style="white-space:pre-wrap;font-family:inherit">${body}</pre>`,
