@@ -25,22 +25,29 @@ export const sendSupportEmail = createServerFn({ method: "POST" })
 
     const to = process.env["SUPPORT_INBOX"];
     const from = process.env["SUPPORT_FROM_ADDRESS"];
-    if (!to || !from) {
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    if (!to || !from || !apiKey) {
       return { sent: false, reason: "email_not_configured" as const, ticketId: ticket.id };
     }
 
+    const body = `Category: ${ticket.category}
+From: ${ticket.contact_email ?? "unknown"}
+
+${ticket.message}`;
+
     try {
       const { sendLovableEmail } = await import("@lovable.dev/email-js");
-      await sendLovableEmail({
-        from,
-        to,
-        replyTo: ticket.contact_email ?? undefined,
-        subject: `[Vaulta support] ${ticket.subject}`,
-        html: `<h2>${ticket.subject}</h2>
-<p><strong>Category:</strong> ${ticket.category}</p>
-<p><strong>From:</strong> ${ticket.contact_email ?? "unknown"}</p>
-<pre style="white-space:pre-wrap;font-family:inherit">${ticket.message}</pre>`,
-      });
+      await sendLovableEmail(
+        {
+          from,
+          to,
+          reply_to: ticket.contact_email ?? undefined,
+          subject: `[Vaulta support] ${ticket.subject}`,
+          text: body,
+          html: `<h2>${ticket.subject}</h2><pre style="white-space:pre-wrap;font-family:inherit">${body}</pre>`,
+        },
+        { apiKey },
+      );
       return { sent: true as const, ticketId: ticket.id };
     } catch (err) {
       console.error("[support] email send failed", err);
