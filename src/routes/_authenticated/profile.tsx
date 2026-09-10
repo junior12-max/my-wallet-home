@@ -173,9 +173,104 @@ function ProfilePage() {
       </section>
 
       <SupportModal open={supportOpen} onClose={() => setSupportOpen(false)} />
+      {nameOpen && (
+        <NameModal
+          firstName={profile?.first_name ?? ""}
+          lastName={profile?.last_name ?? ""}
+          onClose={() => setNameOpen(false)}
+          onSaved={async () => {
+            await queryClient.invalidateQueries({ queryKey: profileQuery.queryKey });
+            setNameOpen(false);
+          }}
+        />
+      )}
 
       <div className="h-6" />
     </AppShell>
+  );
+}
+
+function NameModal({
+  firstName,
+  lastName,
+  onClose,
+  onSaved,
+}: {
+  firstName: string;
+  lastName: string;
+  onClose: () => void;
+  onSaved: () => void | Promise<void>;
+}) {
+  const [first, setFirst] = useState(firstName);
+  const [last, setLast] = useState(lastName);
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    if (first.trim().length < 2) {
+      toast.error("Enter your first name");
+      return;
+    }
+    setSaving(true);
+    try {
+      await updateProfileName(first, last);
+      toast.success("Name updated");
+      await onSaved();
+    } catch {
+      toast.error("Could not update your name");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center">
+      <div
+        className="w-full max-w-md rounded-t-3xl border border-border bg-surface p-5 sm:rounded-3xl"
+        role="dialog"
+        aria-label="Edit your name"
+      >
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="label-caps">Your name</p>
+            <p className="mt-1 font-display text-2xl leading-tight font-semibold">Edit name</p>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="grid size-8 place-items-center rounded-full bg-surface-2 font-mono text-muted ring-1 ring-border transition-all duration-150 hover:text-foreground active:scale-95"
+          >
+            ✕
+          </button>
+        </div>
+
+        <label className="label-caps mt-4 block">First name</label>
+        <input
+          value={first}
+          onChange={(e) => setFirst(e.target.value)}
+          placeholder="Ndunagum"
+          className="mt-1 w-full rounded-xl bg-surface-2 px-3 py-3 text-[13px] ring-1 ring-border outline-none focus:ring-accent"
+        />
+
+        <label className="label-caps mt-3 block">Last name</label>
+        <input
+          value={last}
+          onChange={(e) => setLast(e.target.value)}
+          placeholder="Joshua"
+          className="mt-1 w-full rounded-xl bg-surface-2 px-3 py-3 text-[13px] ring-1 ring-border outline-none focus:ring-accent"
+        />
+
+        <button
+          onClick={save}
+          disabled={saving}
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3.5 text-[13px] font-semibold text-accent-foreground transition-all duration-150 active:scale-95 disabled:opacity-60"
+        >
+          {saving && (
+            <span className="size-3.5 animate-spin rounded-full border-2 border-accent-foreground/40 border-t-accent-foreground" />
+          )}
+          {saving ? "Saving…" : "Save name"}
+        </button>
+      </div>
+    </div>
   );
 }
 
