@@ -122,11 +122,24 @@ function ProfilePage() {
           <NavRow to="/finances" label="Statements & export" hint="Download CSV" />
           <NavRow to="/transfer" label="Transfers" hint="ACH, email, PayPal" />
           <button
+            onClick={requestReset}
+            disabled={resetting}
+            className="flex w-full items-center justify-between px-4 py-3.5 text-left transition-all duration-150 hover:bg-surface-2 active:scale-95 disabled:opacity-60"
+          >
+            <div>
+              <p className="text-[13px] font-semibold">Security &amp; password reset</p>
+              <p className="text-[11px] text-muted">
+                {resetting ? "Sending reset link…" : "Email me a password reset link"}
+              </p>
+            </div>
+            <span className="font-mono text-faint">›</span>
+          </button>
+          <button
             onClick={() => setSupportOpen(true)}
             className="flex w-full items-center justify-between px-4 py-3.5 text-left transition-all duration-150 hover:bg-surface-2 active:scale-95"
           >
             <div>
-              <p className="text-[13px] font-semibold">Help &amp; support</p>
+              <p className="text-[13px] font-semibold">Help &amp; customer support</p>
               <p className="text-[11px] text-muted">Contact our team, track requests</p>
             </div>
             <span className="font-mono text-faint">›</span>
