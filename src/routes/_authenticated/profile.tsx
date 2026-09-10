@@ -78,10 +78,19 @@ function ProfilePage() {
           <span className="grid size-14 place-items-center rounded-full bg-accent-soft font-mono text-sm text-accent ring-1 ring-border">
             {initials(profile?.full_name)}
           </span>
-          <div className="min-w-0">
-            <p className="truncate font-display text-2xl leading-tight font-semibold">
-              {profile?.full_name ?? "Vaulta member"}
-            </p>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <p className="truncate font-display text-2xl leading-tight font-semibold">
+                {profile?.full_name ?? "Vaulta member"}
+              </p>
+              <button
+                onClick={() => setNameOpen(true)}
+                aria-label="Edit your name"
+                className="grid size-7 shrink-0 place-items-center rounded-full bg-surface-2 font-mono text-[11px] text-muted ring-1 ring-border transition-all duration-150 hover:text-foreground active:scale-95"
+              >
+                ✎
+              </button>
+            </div>
             <p className="truncate font-mono text-[11px] text-muted">{email || "—"}</p>
           </div>
         </div>
