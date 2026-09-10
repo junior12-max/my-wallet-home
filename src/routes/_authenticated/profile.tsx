@@ -45,6 +45,20 @@ function ProfilePage() {
   const queryClient = useQueryClient();
   const [email, setEmail] = useState<string>("");
   const [supportOpen, setSupportOpen] = useState(false);
+  const [nameOpen, setNameOpen] = useState(false);
+  const [resetting, setResetting] = useState(false);
+
+  async function requestReset() {
+    setResetting(true);
+    try {
+      const to = await sendPasswordReset();
+      toast.success(`Reset link sent to ${to}`);
+    } catch {
+      toast.error("Could not send the reset link");
+    } finally {
+      setResetting(false);
+    }
+  }
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? ""));
