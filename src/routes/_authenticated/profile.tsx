@@ -1,11 +1,20 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
 import { SupportModal } from "@/components/support-modal";
 import { supabase } from "@/integrations/supabase/client";
-import { accountQuery, initials, isAdminQuery, money, profileQuery } from "@/lib/banking";
+import {
+  accountQuery,
+  initials,
+  isAdminQuery,
+  money,
+  profileQuery,
+  sendPasswordReset,
+  updateProfileName,
+} from "@/lib/banking";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
