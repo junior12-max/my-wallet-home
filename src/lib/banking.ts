@@ -109,13 +109,39 @@ export const profileQuery = {
   queryFn: async () => {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, full_name, status")
+      .select("id, full_name, first_name, last_name, status")
       .limit(1)
       .maybeSingle();
     if (error) throw error;
     return data;
   },
 };
+
+/** Updates the member's own name; keeps full_name in sync for initials. */
+export async function updateProfileName(firstName: string, lastName: string) {
+  const first = firstName.trim();
+  const last = lastName.trim();
+  const fullName = [first, last].filter(Boolean).join(" ");
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData.user) throw userError ?? new Error("Not signed in");
+  const { error } = await supabase
+    .from("profiles")
+    .update({ first_name: first, last_name: last || null, full_name: fullName })
+    .eq("id", userData.user.id);
+  if (error) throw error;
+}
+
+/** Sends a password reset email to the signed-in member's address. */
+export async function sendPasswordReset() {
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  const email = userData.user?.email;
+  if (userError || !email) throw userError ?? new Error("No email on file");
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/auth`,
+  });
+  if (error) throw error;
+  return email;
+}
 
 /** Buckets outgoing spend into the last 7 days, oldest first. */
 export function weeklySpend(transactions: Transaction[]) {
