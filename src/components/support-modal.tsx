@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { createSupportTicket, myTicketsQuery, relativeTime } from "@/lib/banking";
 import { sendSupportEmail } from "@/lib/support.functions";
 
+const SUPPORT_EMAIL = "myproject.admin001@gmail.com";
+
 const press = "transition-all duration-150 active:scale-95";
 
 const categories = [
@@ -15,10 +17,19 @@ const categories = [
   { id: "security", label: "Security" },
 ] as const;
 
-export function SupportModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function SupportModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const queryClient = useQueryClient();
   const notify = useServerFn(sendSupportEmail);
-  const { data: tickets } = useQuery({ ...myTicketsQuery, enabled: open });
+  const { data: tickets } = useQuery({
+    ...myTicketsQuery,
+    enabled: open,
+  });
 
   const [category, setCategory] = useState<string>("general");
   const [subject, setSubject] = useState("");
@@ -32,21 +43,30 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
       toast.error("Add a short subject");
       return;
     }
+
     if (message.trim().length < 10) {
       toast.error("Tell us a little more");
       return;
     }
+
     setSending(true);
+
     try {
       const id = await createSupportTicket({
         subject: subject.trim(),
         message: message.trim(),
         category,
       });
+
       await notify({ data: { ticketId: id } }).catch(() => null);
-      await queryClient.invalidateQueries({ queryKey: myTicketsQuery.queryKey });
+
+      await queryClient.invalidateQueries({
+        queryKey: myTicketsQuery.queryKey,
+      });
+
       setSubject("");
       setMessage("");
+
       toast.success("Request sent — our team will reply by email");
     } catch {
       toast.error("Could not send your request");
@@ -65,10 +85,12 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
         <div className="flex items-start justify-between">
           <div>
             <p className="label-caps">Help &amp; support</p>
+
             <p className="mt-1 font-display text-2xl leading-tight font-semibold">
               How can we help?
             </p>
           </div>
+
           <button
             onClick={onClose}
             aria-label="Close"
@@ -78,13 +100,31 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
           </button>
         </div>
 
+        {/* Primary support contact */}
+        <div className="mt-4 rounded-xl bg-surface-2 p-3 ring-1 ring-border">
+          <p className="label-caps">Customer support</p>
+
+          <p className="mt-1 text-[12px] text-muted">
+            For customer inquiries, you can contact our support team directly:
+          </p>
+
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="mt-2 block break-all font-mono text-[12px] font-semibold text-accent underline-offset-4 hover:underline"
+          >
+            {SUPPORT_EMAIL}
+          </a>
+        </div>
+
         <div className="mt-4 grid grid-cols-4 gap-2">
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setCategory(c.id)}
               className={`rounded-lg px-2 py-2 font-mono text-[10px] tracking-[0.1em] uppercase ring-1 ring-border ${press} ${
-                category === c.id ? "bg-accent text-accent-foreground" : "bg-surface-2 text-muted"
+                category === c.id
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-surface-2 text-muted"
               }`}
             >
               {c.label}
@@ -93,6 +133,7 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
         </div>
 
         <label className="label-caps mt-4 block">Subject</label>
+
         <input
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
@@ -101,6 +142,7 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
         />
 
         <label className="label-caps mt-3 block">Message</label>
+
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -117,26 +159,35 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
           {sending && (
             <span className="size-3.5 animate-spin rounded-full border-2 border-accent-foreground/40 border-t-accent-foreground" />
           )}
+
           {sending ? "Sending…" : "Send request"}
         </button>
 
         {(tickets ?? []).length > 0 && (
           <div className="mt-5">
             <p className="label-caps mb-2">Your requests</p>
+
             <div className="divide-y divide-border rounded-xl ring-1 ring-border">
               {(tickets ?? []).slice(0, 6).map((t) => (
                 <div key={t.id} className="px-3 py-3">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="truncate text-[13px] font-semibold">{t.subject}</p>
+                    <p className="truncate text-[13px] font-semibold">
+                      {t.subject}
+                    </p>
+
                     <span className="shrink-0 rounded-full bg-surface-2 px-2 py-0.5 font-mono text-[9px] tracking-[0.12em] uppercase text-muted ring-1 ring-border">
                       {t.status}
                     </span>
                   </div>
+
                   <p className="mt-1 font-mono text-[10px] text-faint">
                     {relativeTime(t.created_at)}
                   </p>
+
                   {t.admin_note && (
-                    <p className="mt-1.5 text-[12px] text-muted">Reply: {t.admin_note}</p>
+                    <p className="mt-1.5 text-[12px] text-muted">
+                      Reply: {t.admin_note}
+                    </p>
                   )}
                 </div>
               ))}
@@ -147,3 +198,21 @@ export function SupportModal({ open, onClose }: { open: boolean; onClose: () => 
     </div>
   );
 }
+
+What is already in your repo
+
+"src/routes/_authenticated/profile.tsx" already contains the edit-name modal and Settings entries for password reset and customer support.
+
+"src/lib/banking.ts" already contains:
+
+- "updateProfileName(firstName, lastName)"
+- "sendPasswordReset()"
+- "createSupportTicket()"
+- "myTicketsQuery"
+- initials generation from the updated "full_name".
+
+So I would not overwrite those files unnecessarily.
+
+One important detail: the existing support server function uses environment variables ("SUPPORT_INBOX", "SUPPORT_FROM_ADDRESS", and "LOVABLE_API_KEY") to actually send the support email. The new UI above guarantees that customers can see and click "myproject.admin001@gmail.com", while the ticket itself continues to be stored in "support_tickets".
+
+The previous GitHub write attempt returned 403, so these are paste-ready changes rather than changes I can claim were committed.
