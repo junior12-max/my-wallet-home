@@ -26,8 +26,10 @@ export function SplashScreen() {
       }`}
     >
       <div className="flex flex-col items-center">
-        <div className="grid size-20 animate-rise place-items-center rounded-3xl bg-brand-soft ring-1 ring-brand/30">
-          <span className="font-display text-5xl leading-none font-semibold text-brand">V</span>
+        <div className="grid size-20 animate-rise place-items-center rounded-3xl bg-[#E5A93C]/15 ring-1 ring-[#E5A93C]/30">
+          <span className="font-display text-5xl leading-none font-semibold text-[#E5A93C]">
+            V
+          </span>
         </div>
         <p className="mt-5 animate-rise font-mono text-[11px] tracking-[0.34em] text-foreground uppercase [animation-delay:80ms]">
           Vaulta
@@ -35,8 +37,8 @@ export function SplashScreen() {
         <p className="mt-2 animate-rise text-[12px] text-muted [animation-delay:140ms]">
           Private USD banking
         </p>
-        <span className="mt-7 size-5 animate-spin rounded-full border-2 border-brand/25 border-t-brand" />
+        <span className="mt-7 size-5 animate-spin rounded-full border-2 border-[#E5A93C]/25 border-t-[#E5A93C]" />
       </div>
     </div>
   );
-}
+            }
