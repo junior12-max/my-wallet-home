@@ -190,6 +190,7 @@ function ProfilePage() {
   );
 }
 
+
 function NameModal({
   firstName,
   lastName,
@@ -204,6 +205,7 @@ function NameModal({
   const [first, setFirst] = useState(firstName);
   const [last, setLast] = useState(lastName);
   const [saving, setSaving] = useState(false);
+  const queryClient = useQueryClient();
 
   async function save() {
     if (first.trim().length < 2) {
@@ -213,9 +215,12 @@ function NameModal({
     setSaving(true);
     try {
       await updateProfileName(first, last);
+      await queryClient.refetchQueries({ queryKey: profileQuery.queryKey });
       toast.success("Name updated");
       await onSaved();
-    } catch {
+    } catch (err: any) {
+      const msg = err?.message || err?.error_description || JSON.stringify(err);
+      alert(`Update Error: ${msg}`);
       toast.error("Could not update your name");
     } finally {
       setSaving(false);
@@ -273,6 +278,38 @@ function NameModal({
     </div>
   );
 }
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between px-4 py-3">
+      <span className="label-caps">{label}</span>
+      <span className="font-mono text-[13px]">{value}</span>
+    </div>
+  );
+}
+
+function NavRow({
+  to,
+  label,
+  hint,
+}: {
+  to: "/cards" | "/finances" | "/transfer";
+  label: string;
+  hint: string;
+}) {
+  return (
+    <Link to={to} className="flex items-center justify-between px-4 py-3.5 transition-all duration-150 hover:bg-surface-2 active:scale-95">
+      <div>
+        <p className="text-[13px] font-semibold">{label}</p>
+        <p className="text-[11px] text-muted">{hint}</p>
+      </div>
+      <span className="font-mono text-faint">›</span>
+    </Link>
+  );
+        }
+      
+
+  
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
