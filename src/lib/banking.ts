@@ -104,18 +104,33 @@ export const transactionsQuery = {
   },
 };
 
-export const profileQuery = {
-  queryKey: ["profile"],
-  queryFn: async () => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("id, full_name, first_name, last_name, status")
-      .limit(1)
-      .maybeSingle();
-    if (error) throw error;
-    return data;
-  },
-};
+export async function updateProfileName(firstName: string, lastName: string) {
+  const first = firstName.trim();
+  const last = lastName.trim();
+  const fullName = [first, last].filter(Boolean).join(" ");
+  
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData.user) throw userError ?? new Error("Not signed in");
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .upsert({
+      id: userData.user.id,
+      first_name: first,
+      last_name: last || null,
+      full_name: fullName,
+    })
+    .select();
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data || data.length === 0) {
+    throw new Error("Update blocked by database security rules (RLS).");
+  }
+}
+  
 
 /** Updates the member's own name; keeps full_name in sync for initials. */
 export async function updateProfileName(firstName: string, lastName: string) {
