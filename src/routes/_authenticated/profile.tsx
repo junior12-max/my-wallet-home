@@ -174,16 +174,14 @@ function ProfilePage() {
 
       <SupportModal open={supportOpen} onClose={() => setSupportOpen(false)} />
       {nameOpen && (
-        <NameModal
-          firstName={profile?.first_name ?? ""}
-          lastName={profile?.last_name ?? ""}
-          onClose={() => setNameOpen(false)}
-          onSaved={async () => {
-            await queryClient.invalidateQueries({ queryKey: profileQuery.queryKey });
-            setNameOpen(false);
-          }}
-        />
-      )}
+      <NameModal
+    firstName={profile?.first_name || profile?.full_name?.split(" ")[0] || ""}
+    lastName={profile?.last_name || profile?.full_name?.split(" ").slice(1).join(" ") || ""}
+    onClose={() => setNameOpen(false)}
+    onSaved={() => setNameOpen(false)}
+  />
+)}
+      
 
       <div className="h-6" />
     </AppShell>
