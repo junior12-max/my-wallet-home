@@ -104,6 +104,24 @@ export const transactionsQuery = {
   },
 };
 
+export const profileQuery = {
+  queryKey: ["profile"],
+  queryFn: async () => {
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData.user) return null;
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, full_name, first_name, last_name, status")
+      .eq("id", userData.user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+};
+        
+
 export async function updateProfileName(firstName: string, lastName: string) {
   const first = firstName.trim();
   const last = lastName.trim();
